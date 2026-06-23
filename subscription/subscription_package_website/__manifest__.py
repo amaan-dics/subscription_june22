@@ -7,7 +7,10 @@
         'base',
         'web',
         'website',
-        'subscription_package_extended'
+        'subscription_package_extended',
+        'subscription_package',
+        'sale',
+        'stock',
     ],
     'data': [
         "views/home_page_template.xml",

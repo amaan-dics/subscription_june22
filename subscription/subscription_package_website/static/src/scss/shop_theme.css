@@ -129,7 +129,6 @@ h1.o_wsale_cart_title {
 }
 
 
-
 /* Price */
 .oe_currency_value,
 .o_cart_products_table .text-end,
@@ -257,7 +256,6 @@ h1.o_wsale_cart_title {
     color: #e0b84a !important;
     border-color: #c49a2e !important;
 }
-
 
 
 button.btn-primary[name="website_sale_main_button"] {
@@ -598,8 +596,9 @@ a[href*="address"] {
     /*border: 0.4px solid rgb(255 255 255) !important; !* Fixed: added 'solid' and set to #c49a2e *!*/
     /*border-radius: 4px !important; !* Using standard px instead of % for cleaner corners *!*/
 }
-.text-bg-light{
-        background-color: #0e1510 !important;
+
+.text-bg-light {
+    background-color: #0e1510 !important;
     background-color: #FFFFFF;
     border: 0.4px white;
 }
@@ -645,7 +644,7 @@ a[href*="address"] {
 
 }
 
-.css_quantity{
+.css_quantity {
     border-radius: 8px !important;
 }
 
@@ -679,7 +678,6 @@ button.btn-primary[name="o_payment_submit_button"],
 .o_website_sale_checkout .o_total_card .accordion-item {
     background-color: #0e1510 !important;
 }
-
 
 
 .gap-2 {
@@ -718,9 +716,8 @@ button.btn-primary[name="o_payment_submit_button"],
 }
 
 
-
-.o_delivery_form .o_outline:hover:not(.text-muted){
-        border-color: rgb(212 173 67 / 0.71);
+.o_delivery_form .o_outline:hover:not(.text-muted) {
+    border-color: rgb(212 173 67 / 0.71);
 
 }
 
@@ -729,7 +726,7 @@ button.btn-primary[name="o_payment_submit_button"],
    Match o_total_card styling
    ========================================= */
 
-    .o_wsale_total_accordion_item,
+.o_wsale_total_accordion_item,
 .o_wsale_total_accordion_item .accordion-item {
     background: #0e1510 !important;
     border: 0.4px solid rgba(196, 154, 46, 0.45) !important;
@@ -819,8 +816,7 @@ a {
 }
 
 
-
-.btn-fill-primary, .btn-primary{
+.btn-fill-primary, .btn-primary {
     --btn-hover-border-color: rgb(196 154 46 / 0.94)
 }
 
@@ -830,16 +826,16 @@ a {
 }
 
 
-.border-primary{
+.border-primary {
     border-color: #c49a2e12 !important;
 }
 
-.btn:hover{
+.btn:hover {
     background-color: #c49a2e !important;
     color: black;
 }
 
-.px-3{
+.px-3 {
     color: #c49a2e;
 }
 
@@ -879,7 +875,7 @@ a {
     }
 }
 
-.schol{
+.schol {
     color: black !important;
 }
 
@@ -887,14 +883,17 @@ a {
     color: #FFFFFF !important;
     /*opacity: 0.5;*/
 }
+
 .text-muted {
     color: #FFFFFF !important;
 }
+
 .o_portal_category .bg-100 {
     background-color: #0a110c !important;
     border-color: #FFFFFF;
     color: white !important;
 }
+
 .o_portal_index_card .bg-100 {
     background-color: #0a110c !important;
     color: white !important;
@@ -943,13 +942,14 @@ a.bg-100:hover {
     font-family: "DM Sans", sans-serif !important;
 }
 
-#wrap{
+#wrap {
     font-family: "DM Sans", sans-serif !important;
 }
 
 .nav-links .logout {
     color: #ff4848d1 !important;
 }
+
 .oe_website_sale {
     padding-top: 35px !important;
 }
@@ -1049,4 +1049,31 @@ a.bg-100:hover {
     width: 100%;
     display: flex;
     flex-direction: column;
+}
+
+
+.order-2 {
+    margin: 0.9rem 0 !important;
+}
+
+.o_portal_wrap {
+    padding-top: 70px !important;
+}
+
+.alert-link {
+    color: #ffffff !important;
+}
+
+.alert-primary {
+    --alert-bg: #0a110c;
+    --alert-border-color: rgba(255, 255, 255, 0.05);
+}
+
+:where(.card:not([data-vxml])) .card-body:not(.card[data-vxml] .card-body) .text-muted {
+    color: #ffffff !important;
+}
+
+.one_kanban {
+    width: 100%;
+    margin: 2%;
 }

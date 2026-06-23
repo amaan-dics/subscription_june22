@@ -76,6 +76,7 @@ class GenderMatchController(http.Controller, SubscriptionMixin):
         return request.render('subscription_package_extended.find_match_template', values)
 
 
+
 class ConnectController(http.Controller, SubscriptionMixin):
 
     @http.route('/chat/<int:user_id>', type='http', auth='user', website=True)
@@ -149,6 +150,44 @@ class ConnectController(http.Controller, SubscriptionMixin):
                                                                                       'request_id': req.id})
         return request.redirect('/match')
 
+    @http.route('/unmatch_request/<int:req_id>', type='http', auth='user', website=True)
+    def unmatch_request(self, req_id, **kwargs):
+        """Removes the connection and hides/archives the active chatbox discussion channel."""
+        user = request.env.user.partner_id
+        req = request.env['connect.request'].sudo().browse(req_id)
+
+        if req and (req.from_user_id.id == user.id or req.to_user_id.id == user.id):
+            partner_id = req.to_user_id.id if req.from_user_id.id == user.id else req.from_user_id.id
+
+            # Find and delete both bidirectional connection records
+            all_reqs = request.env['connect.request'].sudo().search([
+                ('state', '=', 'accepted'),
+                '|',
+                '&', ('from_user_id', '=', user.id), ('to_user_id', '=', partner_id),
+                '&', ('from_user_id', '=', partner_id), ('to_user_id', '=', user.id)
+            ])
+            all_reqs.unlink()
+
+            # Archive the chatbox discussion channel so it immediately disappears from the sidebar
+            channel = request.env['discuss.channel'].sudo().search([
+                ('channel_type', '=', 'chat'),
+                ('channel_partner_ids', 'in', [user.id]),
+                ('channel_partner_ids', 'in', [partner_id])
+            ], limit=1)
+            if channel:
+                channel.sudo().write({'active': False})
+
+        return request.redirect('/my_requests')
+
+    @http.route('/cancel_request/<int:req_id>', type='http', auth='user', website=True)
+    def cancel_request(self, req_id, **kwargs):
+        """Allows a user to cancel an outgoing pending request."""
+        user = request.env.user.partner_id
+        req = request.env['connect.request'].sudo().browse(req_id)
+        if req and req.from_user_id.id == user.id and req.state == 'pending':
+            req.unlink()
+        return request.redirect('/my_requests')
+
     @http.route('/accept_request/<int:req_id>', type='http', auth='user', website=True)
     def accept_request(self, req_id, **kwargs):
         req = request.env['connect.request'].sudo().browse(req_id)
@@ -179,13 +218,28 @@ class ConnectController(http.Controller, SubscriptionMixin):
             return request.render('subscription_package_extended.no_plan_template')
         if user.kyc_status != 'approved':
             return request.render('subscription_package_extended.kyc_pending_template')
-        requests = request.env['connect.request'].sudo().search(
+
+        incoming_requests = request.env['connect.request'].sudo().search(
             [('to_user_id', '=', user.id), ('state', '=', 'pending')])
+
+
+        sent_requests = request.env['connect.request'].sudo().search(
+            [('from_user_id', '=', user.id), ('state', '=', 'pending')])
+
+        accepted_requests = request.env['connect.request'].sudo().search(
+            [('from_user_id', '=', user.id), ('state', '=', 'accepted')])
+
         plan = user.subscription_plan_id
         connection_limit = plan.connection_limit if plan else 0
         connection_limit_reached = connection_limit > 0 and (user.connection_used / 2) >= connection_limit
-        return request.render('subscription_package_extended.request_template', {'requests': requests,
-                                                                                 'connection_limit_reached': connection_limit_reached})
+
+        return request.render('subscription_package_extended.request_template', {
+            'requests': incoming_requests,  # Kept for backward compatibility if needed
+            'incoming_requests': incoming_requests,
+            'sent_requests': sent_requests,
+            'accepted_requests': accepted_requests,
+            'connection_limit_reached': connection_limit_reached,
+        })
 
     @http.route('/chatbox', type='http', auth='user', website=True)
     def chatbox(self, user_id=None, **kwargs):
@@ -335,22 +389,36 @@ class ChatTermsController(http.Controller):
     def toggle_mute(self, user_id, action):
         current = request.env.user.partner_id
         mute_obj = request.env['chat.mute.user'].sudo()
-        existing = mute_obj.search([('user_id', '=', current.id), ('muted_user_id', '=', int(user_id))], limit=1)
+
+        existing = mute_obj.search([
+            ('user_id', '=', current.id),
+            ('muted_user_id', '=', int(user_id))
+        ], limit=1)
+
         if action == 'mute':
             if not existing:
-                mute_obj.create({'user_id': current.id, 'muted_user_id': int(user_id)})
+                mute_obj.create({
+                    'user_id': current.id,
+                    'muted_user_id': int(user_id)
+                })
         elif action == 'unmute':
             if existing:
                 existing.unlink()
+
         return {'status': 'ok'}
 
     @http.route('/chat/mute_user', type='json', auth='user')
     def mute_user(self, user_id):
         current = request.env.user.partner_id
-        existing = request.env['chat.mute.user'].sudo().search([('user_id', '=', current.id),
-                                                                ('muted_user_id', '=', int(user_id))], limit=1)
+        existing = request.env['chat.mute.user'].sudo().search([
+            ('user_id', '=', current.id),
+            ('muted_user_id', '=', int(user_id))
+        ], limit=1)
         if not existing:
-            request.env['chat.mute.user'].sudo().create({'user_id': current.id, 'muted_user_id': int(user_id)})
+            request.env['chat.mute.user'].sudo().create({
+                'user_id': current.id,
+                'muted_user_id': int(user_id)
+            })
         return {'status': 'ok'}
 
 

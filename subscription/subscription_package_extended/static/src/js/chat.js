@@ -960,3 +960,147 @@ if (document.readyState === "loading") {
 } else {
     initChat();
 }
+
+(function() {
+    // Dynamic CSS injection to guarantee styles apply on the chatbox view bundle
+    const hoverPreviewStyles = `
+        .chatbox-avatar-preview-window {
+            position: absolute;
+            z-index: 999999 !important;
+            width: 240px;
+            height: 240px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 6px;
+            display: none;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            pointer-events: none; /* Prevents cursor loops and flashing */
+        }
+        .chatbox-avatar-preview-window img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            background-color: #f7fafc;
+        }
+        .chatbox-avatar-preview-window.visible {
+            display: block;
+            opacity: 1;
+            transform: scale(1);
+        }
+    `;
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Strict Page Isolation: Only run if chatbox layout selectors exist
+        if (!document.querySelector('.chat-container') && !document.getElementById('chat-wrapper')) return;
+
+        // 1. Inject Styles into Head
+        const styleSheetNode = document.createElement("style");
+        styleSheetNode.innerText = hoverPreviewStyles;
+        document.head.appendChild(styleSheetNode);
+
+        // 2. Create Floating Preview Container in the DOM
+        let previewContainer = document.getElementById('chatbox-avatar-preview-box');
+        if (!previewContainer) {
+            previewContainer = document.createElement('div');
+            previewContainer.id = 'chatbox-avatar-preview-box';
+            previewContainer.className = 'chatbox-avatar-preview-window';
+
+            const previewImage = document.createElement('img');
+            previewImage.id = 'chatbox-avatar-preview-img';
+            previewImage.alt = 'Loading...';
+
+            previewContainer.appendChild(previewImage);
+            document.body.appendChild(previewContainer);
+        }
+
+        const previewImgNode = document.getElementById('chatbox-avatar-preview-img');
+        let activeTargetImg = null;
+
+        // 3. Robust Mouseover Delegation matching overlays and layouts
+        document.addEventListener('mouseover', function(event) {
+            // Check if the hovered element is an image, or a common avatar container layout wrapper
+            const detectionTarget = event.target.closest('img') ||
+                                    event.target.closest('[class*="avatar"]') ||
+                                    event.target.closest('[class*="pfp"]') ||
+                                    event.target.closest('.chat-sidebar-channels a');
+            if (!detectionTarget) return;
+
+            // Find the actual img element within that structure context
+            const targetImg = detectionTarget.tagName === 'IMG' ? detectionTarget : detectionTarget.querySelector('img');
+            if (!targetImg) return;
+
+            if (activeTargetImg === targetImg) return;
+            activeTargetImg = targetImg;
+
+            const imageSrc = targetImg.getAttribute('src') || '';
+            let targetPartnerId = null;
+
+            // Strategy A: Parse standard URLs or secure avatar routing schemes
+            let customRouteRegex = imageSrc.match(/\/partner\/avatar\/(\d+)/);
+            let nativeOdooRegex = imageSrc.match(/\/web\/image\/res\.partner\/(\d+)/);
+
+            if (customRouteRegex) {
+                targetPartnerId = customRouteRegex[1];
+            } else if (nativeOdooRegex) {
+                targetPartnerId = nativeOdooRegex[1];
+            }
+
+            // Strategy B: Fallback to reading data-attributes from parent list nodes if the img element path is clean
+            if (!targetPartnerId) {
+                const parentWithId = targetImg.closest('[data-user-id]') ||
+                                     targetImg.closest('[data-partner-id]') ||
+                                     targetImg.closest('[data-id]');
+                if (parentWithId) {
+                    targetPartnerId = parentWithId.getAttribute('data-user-id') ||
+                                      parentWithId.getAttribute('data-partner-id') ||
+                                      parentWithId.getAttribute('data-id');
+                }
+            }
+
+            // Execute placement calculations if a valid ID was tracked
+            if (targetPartnerId && !isNaN(targetPartnerId)) {
+                // Route image stream sourcing through secure sudo superuser endpoint mapping
+                previewImgNode.src = `/partner/avatar/${targetPartnerId}/image_1920`;
+
+                // Calculate element window positioning dimensions
+                const rectBounds = targetImg.getBoundingClientRect();
+                const pageScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const pageScrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+
+                const cardSize = 240;
+                let calculatedLeft = rectBounds.right + pageScrollLeft + 14;
+
+                // Viewport Collision Check: Flip layout to the left if it breaks the right margin line
+                if (calculatedLeft + cardSize > window.innerWidth) {
+                    calculatedLeft = rectBounds.left + pageScrollLeft - cardSize - 14;
+                }
+
+                // Balance vertical layout centered with image node line
+                let calculatedTop = rectBounds.top + pageScrollTop - (cardSize / 2) + (rectBounds.height / 2);
+                if (calculatedTop < pageScrollTop) calculatedTop = pageScrollTop + 10;
+
+                // Adjust preview element coordinates
+                previewContainer.style.left = calculatedLeft + 'px';
+                previewContainer.style.top = calculatedTop + 'px';
+                previewContainer.classList.add('visible');
+            }
+        });
+
+        // 4. Mouseout Cleanup Listener
+        document.addEventListener('mouseout', function(event) {
+            if (!activeTargetImg) return;
+
+            const relatedTarget = event.relatedTarget;
+            // Clear visibility state only if the cursor has completely exited the active layout element area
+            if (!relatedTarget || (!activeTargetImg.contains(relatedTarget) && activeTargetImg !== relatedTarget)) {
+                previewContainer.classList.remove('visible');
+                activeTargetImg = null;
+            }
+        });
+    });
+})();

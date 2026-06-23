@@ -616,7 +616,7 @@
     flex-shrink: 0;
 }
 
-@media (max-width: 991px) {
+@media (max-width: 1024px) {
     .nav-right-controls {
         display: flex; /* visible only on mobile/tablet */
     }
@@ -712,4 +712,44 @@
 
 .contact-unread-badge.d-none {
     display: none !important;
+}
+
+.chatbox-avatar-preview-window {
+    position: absolute;
+    z-index: 10000;
+    width: 230px;
+    height: 230px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 6px;
+    display: none;
+    opacity: 0;
+    transform: scale(0.88);
+    transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none; /* Prevents cursor interference and flickering */
+}
+
+.chatbox-avatar-preview-window img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    background-color: #f7fafc;
+}
+
+.chatbox-avatar-preview-window.visible {
+    display: block;
+    opacity: 1;
+    transform: scale(1);
+}
+
+.match-card .online-dot{
+    right: 10px !important;
+    top: 13px;
+}
+
+.req-name {
+    display: flex !important;
 }

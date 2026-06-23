@@ -21,6 +21,11 @@ class ResPartner(models.Model):
     connection_used = fields.Integer(compute="_compute_usage", string="Connections Used")
     chat_used = fields.Integer(compute="_compute_usage", string="Chats Used")
     last_seen = fields.Datetime(string="Last Seen", default=fields.Datetime.now)
+    is_verified = fields.Boolean(
+        string='Verified Badge',
+        default=False,
+        help='User has purchased the verification badge and it is displayed on their profile.',
+    )
 
     def action_kyc_approved(self):
         self.kyc_status = 'approved'

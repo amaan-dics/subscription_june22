@@ -233,3 +233,38 @@ class PartnerAvatarController(http.Controller):
             ('Cache-Control', 'public, max-age=86400'), # Cache for 24 hours to boost performance
         ]
         return request.make_response(image_data, headers)
+
+class VerificationController(http.Controller):
+
+    @http.route('/purchase_verification', type='json', auth='user')
+    def purchase_verification(self, payment_reference=None):
+        """
+        [CHANGE 15] Purchase verification badge webhook or manual activation endpoint.
+        """
+        partner = request.env.user.partner_id
+
+        # Unique safeguard search
+        verification = request.env['user.verification'].sudo().search([
+            ('partner_id', '=', partner.id)
+        ], limit=1)
+
+        if not verification:
+            request.env['user.verification'].sudo().create({
+                'partner_id': partner.id,
+                'is_verified': True,
+                'payment_reference': payment_reference or '',
+            })
+        else:
+            verification.write({'is_verified': True})
+
+        partner.sudo().write({'is_verified': True})
+
+        return {
+            'status': 'ok',
+            'message': 'Verification badge activated! Refresh the page to see your badge.'
+        }
+
+    @http.route('/verify_check', type='json', auth='user')
+    def verify_check(self):
+        partner = request.env.user.partner_id
+        return {'is_verified': bool(partner.is_verified)}
