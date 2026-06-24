@@ -1077,3 +1077,80 @@ a.bg-100:hover {
     width: 100%;
     margin: 2%;
 }
+/* === IMPROVED VERIFIED BADGE - PROFILE PAGE === */
+.verified-badge-profile {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(196, 154, 46, 0.12);
+    border: 1px solid rgba(196, 154, 46, 0.3);
+    padding: 6px 14px 6px 8px;
+    border-radius: 30px;
+    color: #c49a2e;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    cursor: default;
+    position: relative;
+}
+
+.verified-badge-profile:hover {
+    background: rgba(196, 154, 46, 0.18);
+    border-color: #c49a2e;
+    transform: translateY(-1px);
+}
+
+.verified-badge-img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 3px rgba(196, 154, 46, 0.4));
+}
+
+.verified-text {
+    letter-spacing: 0.3px;
+}
+
+/* Tooltip */
+.verified-badge-profile::after {
+    content: '✓ Verified Account';
+    position: absolute;
+    bottom: -38px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #c49a2e;
+    color: #0e1510;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 100;
+}
+
+.verified-badge-profile:hover::after {
+    opacity: 1;
+}
+.verified-badge-premium {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(90deg, #c49a2e, #e0b84a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+    font-size: 1.05rem;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(224, 184, 74, 0.3);
+}
+
+.verified-badge-premium img {
+    width: 26px;
+    height: 26px;
+    filter: brightness(1.1);
+}

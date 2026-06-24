@@ -62,17 +62,14 @@
                                     <t t-esc="partner.name"/>
                                 </h4>
 
-                                <p >
+                                <p>
                                     <t t-if="partner.is_verified">
-                                            <span class="verified-badge-inline-wrapper text-yellow" style="color: #c49a2e;">
-                                                <img src="/subscription_package_extended/static/src/img/verified_user_badge.png"
-                                                                 alt="Verified"
-                                                                 style="width: 31px; height: 31px; object-fit: contain; display: block; "/>
-
-
-                                                Verified User
-                                            </span>
-                                        </t>
+                                        <div class="verified-badge-premium">
+                                            <img src="/subscription_package_extended/static/src/img/verified_user_badge.png"
+                                                 alt="Verified" class="verified-badge-img"/>
+                                            <span>Verified</span>
+                                        </div>
+                                    </t>
                                 </p>
 
                                 <p style="color: rgba(255,255,255,0.4); font-size: 0.85rem; margin-bottom: 1.2rem;">
