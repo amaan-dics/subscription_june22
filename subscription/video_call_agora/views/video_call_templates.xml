@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="frontend_layout_agora_extend" inherit_id="web.frontend_layout">
+        <xpath expr="//head" position="inside">
+            <script src="https://download.agora.io/sdk/release/AgoraRTC_N-4.24.1.js"></script>
+        </xpath>
+        <xpath expr="//footer" position="after">
+
+            <div id="vc-calling-screen" class="vc-video-canvas-overlay d-none">
+                <div class="vc-pulse-container">
+                    <div class="vc-pulse-circle">
+                        <i class="fa fa-phone"></i>
+                    </div>
+                    <h4 id="vc-calling-status-text">Calling Match...</h4>
+                    <button id="vc-btn-cancel-outgoing" class="btn btn-danger rounded-pill px-4 mt-4 shadow-sm">Cancel</button>
+                </div>
+            </div>
+
+            <div id="vc-incoming-card" class="vc-alert-dialog d-none">
+                <h5 class="mb-1 text-warning"><i class="fa fa-heart"></i> Video Invitation</h5>
+                <p id="vc-incoming-msg" class="mb-3 small">Your match is calling you...</p>
+                <div class="vc-alert-actions">
+                    <button id="vc-btn-answer" class="vc-btn-accept">Answer</button>
+                    <button id="vc-btn-decline" class="vc-btn-decline">Decline</button>
+                </div>
+            </div>
+
+            <div id="vc-active-video-canvas" class="vc-video-canvas-overlay d-none">
+                <div class="vc-main-viewport">
+                    <div id="vc-remote-track" class="w-100 h-100"></div>
+
+                    <div id="vc-local-track"></div>
+
+                    <div class="vc-control-dock">
+                        <button id="vc-toggle-audio" class="vc-dock-btn" title="Toggle Microphone">
+                            <i class="fa fa-microphone"></i>
+                        </button>
+                        <button id="vc-hangup-active" class="vc-dock-btn vc-hangup" title="End Session">
+                            <i class="fa fa-phone"></i>
+                        </button>
+                        <button id="vc-toggle-video" class="vc-dock-btn" title="Toggle Camera Feed">
+                            <i class="fa fa-video-camera"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="chatbox_template_video_btn_inherit" inherit_id="subscription_package_extended.chatbox_template" name="Agora Video Trigger Option">
+        <xpath expr="//div[hasclass('chat-header-actions')]/button[@id='chat_action_dropdown']" position="before">
+            <button type="button" class="vc-start-btn me-2 btn btn-sm text-white" id="vc_call_btn" style="background-color: #c9a84c; font-weight: 500; border-radius: 6px; padding: 6px 14px;" title="Start a secure video call">
+                <i class="fa fa-video-camera"></i> Video Call
+            </button>
+        </xpath>
+    </template>
+</odoo>

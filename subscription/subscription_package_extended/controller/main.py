@@ -204,6 +204,7 @@ class PortalNotificationController(http.Controller):
 
         return unread_map
 
+
 class PartnerAvatarController(http.Controller):
 
     @http.route('/partner/avatar/<int:partner_id>/<string:field>', type='http', auth='public', website=True)

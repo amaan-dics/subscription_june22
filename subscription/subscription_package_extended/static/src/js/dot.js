@@ -16,26 +16,24 @@ $(document).ready(function () {
             }),
             success: function (result) {
 
-                if (!result.result) {
+                if (!result || !result.result) {
                     return;
                 }
+
 
                 const onlineUsers = result.result.online_users || [];
 
                 $('.user-status-dot').each(function () {
-
-                    const partnerId = parseInt(
-                        $(this).attr('data-partner-id')
-                    );
-
+                    const partnerId = parseInt($(this).attr('data-partner-id'));
+                    if (isNaN(partnerId)) {  // ← Add this check
+                        console.warn('Invalid partner ID:', $(this).attr('data-partner-id'));
+                        return; // Skip invalid IDs
+                    }
                     if (onlineUsers.includes(partnerId)) {
-
                         $(this)
                             .removeClass('offline-dot')
                             .addClass('online-dot');
-
                     } else {
-
                         $(this)
                             .removeClass('online-dot')
                             .addClass('offline-dot');

@@ -434,7 +434,8 @@ class WebsitePresence(http.Controller):
         })
 
         online_users = request.env['res.partner'].sudo().search([
-            ('last_seen', '>=', fields.Datetime.now() - timedelta(seconds=15))
+            ('last_seen', '>=', fields.Datetime.now() - timedelta(seconds=15)),
+            ('last_seen', '!=', False)
         ])
 
         return {
@@ -444,7 +445,8 @@ class WebsitePresence(http.Controller):
     @http.route('/online/users', type='json', auth='user')
     def get_online_users(self):
         online_users = request.env['res.partner'].sudo().search([
-            ('last_seen', '>=', fields.Datetime.now() - timedelta(seconds=15))
+            ('last_seen', '>=', fields.Datetime.now() - timedelta(seconds=15)),
+            ('last_seen', '!=', False)
         ])
 
         return [{
