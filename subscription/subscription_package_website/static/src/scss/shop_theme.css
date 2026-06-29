@@ -1077,6 +1077,7 @@ a.bg-100:hover {
     width: 100%;
     margin: 2%;
 }
+
 /* === IMPROVED VERIFIED BADGE - PROFILE PAGE === */
 .verified-badge-profile {
     display: inline-flex;
@@ -1128,13 +1129,14 @@ a.bg-100:hover {
     pointer-events: none;
     transition: opacity 0.25s ease;
     font-weight: 600;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     z-index: 100;
 }
 
 .verified-badge-profile:hover::after {
     opacity: 1;
 }
+
 .verified-badge-premium {
     display: inline-flex;
     align-items: center;
@@ -1153,4 +1155,19 @@ a.bg-100:hover {
     width: 26px;
     height: 26px;
     filter: brightness(1.1);
+}
+/* Show avatar only on mobile & tablet (max 991px) */
+@media (max-width: 991px) {
+    .o_avatar.rounded,
+    img.o_avatar.rounded {
+        display: block !important;
+    }
+}
+
+/* Hide avatar on larger screens (desktop) */
+@media (min-width: 992px) {
+    .o_avatar.rounded,
+    img.o_avatar.rounded {
+        display: none !important;
+    }
 }

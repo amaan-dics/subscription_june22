@@ -38,7 +38,7 @@
                                         <div class="req-info">
                                             <div class="req-name">
                                                 <t t-esc="req.from_user_id.name"/>
-                                                <t t-if="p.is_verified">
+                                                <t t-if="req.from_user_id.is_verified">
                                                     <span class="verified-badge-inline-wrapper"
                                                           title="This user has been verified">
                                                         <img src="/subscription_package_extended/static/src/img/verified_user_badge.png"
