@@ -115,23 +115,28 @@ class PortalNotificationController(http.Controller):
             ('is_read', '=', False),
         ])
 
-        # Filter out blocked + muted users for popups
-        notifications = notifications.filtered(
+        # Mark ALL fetched notifications as read immediately, regardless of
+        # mute/block status. Otherwise muted notifications pile up unread
+        # and all fire as popups at once the moment the user unmutes.
+        notifications.write({'is_read': True})
+
+        # Only build popup payload from non-blocked, non-muted notifications.
+        # Muted/blocked ones are already marked read above so they will
+        # never resurface as popups later.
+        popup_notifications = notifications.filtered(
             lambda n: n.ref_user_id.id not in blocked_partner_ids and
                       n.ref_user_id.id not in muted_partner_ids
         )
 
         data = []
-        for notif in notifications:
+        for notif in popup_notifications:
             data.append({
                 'id': notif.id,
                 'message': notif.message,
                 'from': notif.ref_user_id.name if notif.ref_user_id else 'User',
                 'from_id': notif.ref_user_id.id if notif.ref_user_id else False,
-                'image': '/partner/avatar/%s/image_128' % notif.ref_user_id if notif.ref_user_id else '',
+                'image': '/partner/avatar/%s/image_128' % notif.ref_user_id.id if notif.ref_user_id else '',
             })
-
-        notifications.write({'is_read': True})
 
         total_unread = 0
 
