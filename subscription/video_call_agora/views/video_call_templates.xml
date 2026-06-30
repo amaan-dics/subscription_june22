@@ -48,9 +48,14 @@
     </template>
 
     <template id="chatbox_template_video_btn_inherit" inherit_id="subscription_package_extended.chatbox_template" name="Agora Video Trigger Option">
+        <xpath expr="//div[hasclass('chat-header-actions')]" position="attributes">
+            <attribute name="class" add="d-flex align-items-center gap-2" separator=" "/>
+        </xpath>
+
         <xpath expr="//div[hasclass('chat-header-actions')]/button[@id='chat_action_dropdown']" position="before">
-            <button type="button" class="vc-start-btn me-2 btn btn-sm text-white" id="vc_call_btn" style="background-color: #c9a84c; font-weight: 500; border-radius: 6px; padding: 6px 14px;" title="Start a secure video call">
-                <i class="fa fa-video-camera"></i> Video Call
+            <button type="button" class="vc-start-btn btn btn-sm" id="vc_call_btn" title="Start a secure video call">
+                <i class="fa fa-video-camera"></i>
+                <span class="d-none d-sm-inline ms-2">Video Call</span>
             </button>
         </xpath>
     </template>

@@ -1,168 +1,41 @@
-$vc-gold: #c9a84c;
-$vc-dark-bg: #111111;
-$vc-panel-bg: #1e1e1e;
-$vc-white: #ffffff;
-$vc-danger: #dc3545;
-
-.vc-video-canvas-overlay {
-    position: fixed;
-    inset: 0;
-    background: $vc-dark-bg;
-    z-index: 10000;
-    display: flex;
-    flex-direction: column;
+.vc-start-btn {
+    background-color: transparent !important;
+    color: #c9a84c !important;
+    border: 1px solid #c9a84c !important;
+    padding: 6px 16px;
+    border-radius: 50px; /* Gives the premium pill-shape look */
+    font-weight: 500;
+    font-size: 0.85rem;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-}
+    justify-content: center; /* Fixed typo: changed hyphen to a colon */
+    transition: all 0.2s ease-in-out;
+    height: 34px;
+    box-shadow: none;
 
-.vc-main-viewport {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    background: #000;
-}
-
-#vc-remote-track {
-    width: 100%;
-    height: 100%;
-
-    div {
-        background: #000 !important;
+    i {
+        font-size: 13px;
     }
-}
-
-#vc-local-track {
-    position: absolute;
-    width: 130px;
-    height: 190px;
-    bottom: 100px;
-    right: 20px;
-    border: 2px solid $vc-white;
-    border-radius: 12px;
-    overflow: hidden;
-    background: #222;
-    z-index: 10002;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-}
-
-.vc-control-dock {
-    position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(25, 25, 25, 0.85);
-    padding: 14px 28px;
-    border-radius: 40px;
-    display: flex;
-    gap: 20px;
-    z-index: 10005;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.vc-dock-btn {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    border: none;
-    background: $vc-white;
-    color: #222;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
     &:hover {
-        transform: scale(1.1);
+        background-color: rgba(201, 168, 76, 0.1) !important;
+        color: #b0913b !important;
+        border-color: #b0913b !important;
     }
 
-    &.vc-hangup {
-        background: $vc-danger;
-        color: $vc-white;
-    }
-
-    &.vc-muted {
-        background: #444444;
-        color: $vc-white;
+    &:focus, &:active {
+        outline: none !important;
+        box-shadow: 0 0 0 0.2rem rgba(201, 168, 76, 0.25) !important;
     }
 }
 
-.vc-alert-dialog {
-    position: fixed;
-    top: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: $vc-panel-bg;
-    border: 1px solid $vc-gold;
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
-    z-index: 10010;
-    text-align: center;
-    color: $vc-white;
-    min-width: 300px;
-    animation: vcSlideDown 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.vc-alert-actions {
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    margin-top: 20px;
-}
-
-.vc-btn-accept {
-    background: #198754;
-    color: white;
-    border: none;
-    padding: 10px 24px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.2s;
-    &:hover { background: #157347; }
-}
-
-.vc-btn-decline {
-    background: $vc-danger;
-    color: white;
-    border: none;
-    padding: 10px 24px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.2s;
-    &:hover { background: #bb2d3b; }
-}
-
-.vc-pulse-container {
-    text-align: center;
-    color: $vc-white;
-}
-
-.vc-pulse-circle {
-    width: 84px;
-    height: 84px;
-    border-radius: 50%;
-    background: rgba($vc-gold, 0.2);
-    border: 2px solid $vc-gold;
-    margin: 0 auto 24px;
-    animation: vcPulseAnim 1.6s infinite ease-in-out;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
-    color: $vc-gold;
-}
-
-@keyframes vcSlideDown {
-    from { top: -120px; opacity: 0; }
-    to { top: 40px; opacity: 1; }
-}
-
-@keyframes vcPulseAnim {
-    0% { transform: scale(0.96); box-shadow: 0 0 0 0 rgba($vc-gold, 0.6); }
-    70% { transform: scale(1.06); box-shadow: 0 0 0 22px rgba($vc-gold, 0); }
-    100% { transform: scale(0.96); box-shadow: 0 0 0 0 rgba($vc-gold, 0); }
+/* Responsive adjustment for extra small mobile screen sizes */
+@media (max-width: 575.98px) {
+    .vc-start-btn {
+        padding: 0 !important;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%; /* Clean circle on mobile screens */
+        margin-right: 4px;
+    }
 }
