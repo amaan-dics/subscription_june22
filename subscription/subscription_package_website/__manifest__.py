@@ -25,6 +25,7 @@
             'subscription_package_website/static/src/scss/style.scss',
             'subscription_package_website/static/src/scss/shop_theme.css',
             'subscription_package_website/static/src/js/header.js',
+            'subscription_package_website/static/src/js/match_online_status.js',
         ],
     },
     'license': 'LGPL-3',

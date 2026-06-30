@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ═══════════════════════════════════════════════════════════════════
+         Mobile sidebar footer — "Back to Home" link
+         ═══════════════════════════════════════════════════════════════════
+         Adds a small footer row at the bottom of the chat sidebar
+         (div.chat-sidebar), visible only on mobile/tablet widths where the
+         sidebar acts as a hamburger-style slide-in panel.
+
+         Placement: appended as the LAST child of div.chat-sidebar, after
+         the contact list (div#contact_list), so it sits at the bottom of
+         the panel naturally via flex layout.
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <template id="chatbox_template_sidebar_home_link"
+              inherit_id="subscription_package_extended.chatbox_template"
+              name="Chatbox Sidebar Home Link">
+
+        <xpath expr="//div[@id='contact_list']" position="after">
+            <div class="chat-sidebar-footer flex-shrink-0 d-md-none">
+                <a href="/" class="chat-sidebar-home-link">
+                    <i class="fa fa-home"/>
+                    <span>Back to Home</span>
+                </a>
+            </div>
+        </xpath>
+
+    </template>
+</odoo>

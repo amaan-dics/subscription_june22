@@ -16,7 +16,7 @@
                                     <div class="req-user">
 
                                         <img t-if="block.blocked_user_id.image_1920"
-                                             t-att-src="'/web/image/res.partner/%s/image_1920' % block.blocked_user_id.id"
+                                             t-att-src="'/partner/avatar/%s/image_1920' % block.blocked_user_id.id"
                                              class="req-avatar"/>
 
                                         <img t-else=""

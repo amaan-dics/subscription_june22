@@ -9,22 +9,29 @@ let activePartnerId = null;
 let currentRoomId = null;
 let isAudioMuted = false;
 let isVideoMuted = false;
-let callerCredentials = null; // Cache to retain token details across loops
+let callerCredentials = null;
 
 function initAgoraVideoModule() {
     const callBtn = document.getElementById('vc_call_btn');
-    if (callBtn) {
-        callBtn.addEventListener('click', triggerOutgoingCall);
-    }
+    if (callBtn) callBtn.addEventListener('click', triggerOutgoingCall);
 
-    // Interaction Hooks
-    document.getElementById('vc-btn-cancel-outgoing').addEventListener('click', terminateActiveCall);
-    document.getElementById('vc-btn-decline').addEventListener('click', declineIncomingCall);
-    document.getElementById('vc-btn-answer').addEventListener('click', acceptIncomingCall);
-    document.getElementById('vc-hangup-active').addEventListener('click', terminateActiveCall);
+    const cancelBtn = document.getElementById('vc-btn-cancel-outgoing');
+    if (cancelBtn) cancelBtn.addEventListener('click', terminateActiveCall);
 
-    document.getElementById('vc-toggle-audio').addEventListener('click', toggleLocalAudio);
-    document.getElementById('vc-toggle-video').addEventListener('click', toggleLocalVideo);
+    const declineBtn = document.getElementById('vc-btn-decline');
+    if (declineBtn) declineBtn.addEventListener('click', declineIncomingCall);
+
+    const answerBtn = document.getElementById('vc-btn-answer');
+    if (answerBtn) answerBtn.addEventListener('click', acceptIncomingCall);
+
+    const hangupBtn = document.getElementById('vc-hangup-active');
+    if (hangupBtn) hangupBtn.addEventListener('click', terminateActiveCall);
+
+    const toggleAudioBtn = document.getElementById('vc-toggle-audio');
+    if (toggleAudioBtn) toggleAudioBtn.addEventListener('click', toggleLocalAudio);
+
+    const toggleVideoBtn = document.getElementById('vc-toggle-video');
+    if (toggleVideoBtn) toggleVideoBtn.addEventListener('click', toggleLocalVideo);
 
     startSignalPollingLoop();
 }
@@ -45,8 +52,6 @@ async function triggerOutgoingCall() {
         const res = await rpc('/video_call/initiate', { to_partner_id: activePartnerId });
         if (res && res.status === 'success') {
             currentRoomId = res.room_id;
-
-            // Cache caller details to use once the callee answers
             callerCredentials = {
                 appId: res.app_id,
                 roomId: res.room_id,
@@ -77,12 +82,9 @@ function startSignalPollingLoop() {
             }
             else if (data.signal === 'call_accepted') {
                 document.getElementById('vc-calling-screen').classList.add('d-none');
-
-                // Use the returned server-calculated token to overwrite client cache
                 if (callerCredentials && data.token) {
                     callerCredentials.token = data.token;
                 }
-
                 if (callerCredentials) {
                     await streamLiveSession(callerCredentials.appId, callerCredentials.roomId, callerCredentials.token, callerCredentials.uid);
                 }
@@ -127,37 +129,25 @@ async function terminateActiveCall() {
 
 async function streamLiveSession(appId, roomId, token, intUid) {
     try {
-        // Create Agora RTC Engine Instance
         agoraClient = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
-
-        // Event hooks for incoming multi-peer tracking
         agoraClient.on("user-published", async (user, mediaType) => {
             await agoraClient.subscribe(user, mediaType);
             if (mediaType === "video") {
                 const remoteContainer = document.getElementById('vc-remote-track');
-                remoteContainer.innerHTML = ""; // Flush previous layout boxes
+                remoteContainer.innerHTML = "";
                 user.videoTrack.play(remoteContainer);
             }
             if (mediaType === "audio") {
                 user.audioTrack.play();
             }
         });
-
-        // Establish core network bridge using the authenticated dynamic token
         await agoraClient.join(appId, roomId, token || null, intUid);
-
-        // Capture local microphone and camera feeds
         [localAudioTrack, localVideoTrack] = await AgoraRTC.createMicrophoneAndCameraTracks();
-
-        // Render local track viewport locally
         const localContainer = document.getElementById('vc-local-track');
         localContainer.innerHTML = "";
         localVideoTrack.play(localContainer);
-
-        // Push local streams outward over the established bridge
         await agoraClient.publish([localAudioTrack, localVideoTrack]);
-
-        // Toggle active viewport display window
+        document.getElementById('vc-active-video-canvas').classList.remove('d-none');
         document.getElementById('vc-active-video-canvas').classList.remove('d-none');
 
     } catch (err) {

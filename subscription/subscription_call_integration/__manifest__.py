@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
-    'name': 'Agora Video Call Integration',
-    'version': '18.0.1.0.0',
+    'name': 'Subscription Call Integration',
+    'version': '18.0.0.0',
     'category': 'Website/Dating',
     'summary': 'Secure Token-Authenticated Private Video Calling for Dating Platforms using Agora.io',
     'description': """
@@ -12,12 +12,13 @@
     'author': 'Data Integer Consultancy',
     'depends': ['base', 'web', 'website'],
     'data': [
+        'views/res_config_settings_views.xml',
         'views/video_call_templates.xml',
     ],
     'assets': {
         'web.assets_frontend': [
-            'video_call_agora/static/src/scss/video_call.scss',
-            'video_call_agora/static/src/js/video_call.js',
+            'subscription_call_integration/static/src/scss/video_call.scss',
+            'subscription_call_integration/static/src/js/video_call.js',
         ],
     },
     'installable': True,

@@ -27,6 +27,7 @@
         'views/connect_request.xml',
         'views/chat_terms_views.xml',
         'views/chat_terms_template.xml',
+        'views/chatbox_sidebar_footer_patch.xml',
     ],
     'assets': {
         'web.assets_frontend': [

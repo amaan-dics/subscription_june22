@@ -1,0 +1,238 @@
+.vc-start-btn {
+    background-color: transparent !important;
+    color: #c9a84c !important;
+    border: 1px solid #c9a84c !important;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-weight: 500;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease-in-out;
+    height: 34px;
+    box-shadow: none;
+
+    i {
+        font-size: 13px;
+    }
+
+    &:hover {
+        background-color: rgba(201, 168, 76, 0.1) !important;
+        color: #0a110c !important;
+        border-color: #0a110c !important;
+    }
+
+    &:focus, &:active {
+        outline: none !important;
+        box-shadow: 0 0 0 0.2rem rgba(201, 168, 76, 0.25) !important;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .vc-start-btn {
+        padding: 0 !important;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        margin-right: 4px;
+    }
+}
+
+// Video Canvas Overlay - Only show when NOT d-none
+.vc-video-canvas-overlay:not(.d-none) {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: rgba(0, 0, 0, 0.95) !important;
+    z-index: 9999 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.vc-video-canvas-overlay.d-none {
+    display: none !important;
+}
+
+// Calling Screen - Pulse Animation
+.vc-pulse-container {
+    text-align: center;
+    color: white;
+
+    .vc-pulse-circle {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: rgba(201, 168, 76, 0.2);
+        border: 3px solid #c9a84c;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        animation: vc-pulse 2s infinite;
+
+        i {
+            font-size: 48px;
+            color: #c9a84c;
+        }
+    }
+
+    h4 {
+        margin: 20px 0;
+        font-size: 18px;
+        font-weight: 600;
+    }
+}
+
+@keyframes vc-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(201, 168, 76, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 40px rgba(201, 168, 76, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(201, 168, 76, 0);
+    }
+}
+
+// Incoming Call Alert - Only show when NOT d-none
+.vc-alert-dialog:not(.d-none) {
+    position: fixed !important;
+    bottom: 30px !important;
+    right: 30px !important;
+    background: #0a110c !important;
+    border: 1px solid rgba(201, 168, 76, 0.3) !important;
+    border-radius: 12px !important;
+    padding: 24px !important;
+    width: 320px !important;
+    max-width: calc(100% - 30px) !important;
+    z-index: 10000 !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8) !important;
+    color: white;
+    display: block !important;
+}
+
+.vc-alert-dialog.d-none {
+    display: none !important;
+}
+
+.vc-alert-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.vc-btn-accept,
+.vc-btn-decline {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+}
+
+.vc-btn-accept {
+    background: #4ade80 !important;
+    color: #000 !important;
+
+    &:hover {
+        background: #22c55e !important;
+    }
+}
+
+.vc-btn-decline {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.2) !important;
+    }
+}
+
+// Active Video Canvas
+.vc-main-viewport {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #000;
+}
+
+#vc-remote-track {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+}
+
+#vc-local-track {
+    position: absolute !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    width: 180px !important;
+    height: 240px !important;
+    border-radius: 12px !important;
+    border: 2px solid rgba(201, 168, 76, 0.5) !important;
+    background: #000 !important;
+    overflow: hidden !important;
+
+    video {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+}
+
+// Control Dock
+.vc-control-dock {
+    position: absolute !important;
+    bottom: 30px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    display: flex !important;
+    gap: 16px !important;
+    justify-content: center !important;
+    align-items: center !important;
+    z-index: 100 !important;
+}
+
+.vc-dock-btn {
+    width: 56px !important;
+    height: 56px !important;
+    border-radius: 50% !important;
+    border: none !important;
+    background: rgba(201, 168, 76, 0.2) !important;
+    color: #c9a84c !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.2s ease !important;
+
+    &:hover {
+        background: rgba(201, 168, 76, 0.4) !important;
+        transform: scale(1.1) !important;
+    }
+
+    &.vc-muted {
+        background: rgba(239, 68, 68, 0.3) !important;
+        color: #ef4444 !important;
+    }
+}
+
+.vc-hangup {
+    background: rgba(239, 68, 68, 0.3) !important;
+    color: #ef4444 !important;
+
+    &:hover {
+        background: rgba(239, 68, 68, 0.5) !important;
+    }
+}
